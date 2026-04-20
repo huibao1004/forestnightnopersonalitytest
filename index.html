@@ -265,6 +265,9 @@
         
         <button class="btn" onclick="downloadResult()">長按儲存 / 下載圖片</button>
         <button class="btn btn-outline" onclick="shareResult()">分享測驗給朋友</button>
+        
+        <button id="rickroll-btn" class="btn" style="display: none; background-color: #D96A6A; color: white; margin-top: 10px;" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')">🎁 領取隱藏版大禮包</button>
+
         <button class="btn btn-outline" style="border: none; color: #888; font-size: 14px; margin-top: 10px;" onclick="location.reload()">重新測驗</button>
     </div>
 </div>
@@ -377,27 +380,40 @@
     }
 
     function calculateResult() {
-        let highestTrait = "E";
-        let maxScore = 0;
-        
-        for (const [trait, score] of Object.entries(scores)) {
-            if (score > maxScore) {
-                maxScore = score;
-                highestTrait = trait;
-            }
+        // 【新增】檢查是否觸發隱藏版結局
+        const allSame = rawAnswers.every(val => val === rawAnswers[0]);
+        let finalTrait = null;
+
+        if (allSame && rawAnswers.length === questions.length) {
+            if (rawAnswers[0] === 1) finalTrait = "ALL_1";
+            else if (rawAnswers[0] === 3) finalTrait = "ALL_3";
+            else if (rawAnswers[0] === 5) finalTrait = "ALL_5";
         }
 
-        const result = resultsData[highestTrait];
+        // 如果沒有觸發隱藏版，就走原本的常規計算
+        if (!finalTrait) {
+            let highestTrait = "E";
+            let maxScore = 0;
+            
+            for (const [trait, score] of Object.entries(scores)) {
+                if (score > maxScore) {
+                    maxScore = score;
+                    highestTrait = trait;
+                }
+            }
+            finalTrait = highestTrait;
+        }
 
+        const result = resultsData[finalTrait];
+
+        // 接下來的畫面渲染跟原本一樣
         document.getElementById('result-img').src = result.img;
         document.getElementById('result-name').innerText = result.name;
         document.getElementById('result-role').innerText = result.role;
 
-        // 生成 Hashtags
         const tagsHtml = result.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
         document.getElementById('result-tags').innerHTML = tagsHtml;
 
-        // 生成長文描述
         document.getElementById('result-desc').innerHTML = result.desc;
 
         document.getElementById('quiz-section').classList.remove('active');
