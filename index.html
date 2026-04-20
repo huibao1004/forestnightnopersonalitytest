@@ -1,4 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在森林之中，你的代表物是？</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-bg: #E5E9EC; /* 礦石灰藍背景 */
+            --text-color: #2C3E2D;
+            --accent-color: #6B8E73;
+            --button-hover: #5A7A61;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--card-bg);
+            min-height: 100vh;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 區塊共用設定 */
+        .section {
+            display: none;
+            padding: 40px 30px;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .section.active {
+            display: flex;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            line-height: 1.4;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        /* 按鈕設計 - 簡約風 */
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-bg);
+        }
+
+        /* 測驗進度與選項 */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #E0E0E0;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--accent-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            background-color: var(--primary-bg);
+            border: 1px solid transparent;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-color);
+        }
+
+        .option-btn:hover {
+            background-color: #E8EFE9;
+            border-color: var(--accent-color);
+        }
+
+        /* 結果頁面設計 */
+        #result-content {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .result-title {
+            font-size: 26px;
+            color: var(--text-color);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .result-subtitle {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        /* 結果頁文字排版優化 */
+        .result-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .tag {
+            background-color: #E8EFE9;
+            color: var(--button-hover);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        #result-desc {
+            text-align: left;
+        }
+
+        #result-desc p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 18px;
+            color: #4A554B;
+        }
+
+        #result-desc strong {
+            color: var(--text-color);
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #E0E0E0;
+            padding-bottom: 4px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="home-section" class="section active" style="padding: 0;">
+        <div style="width: 100%; height: 300px; overflow: hidden; position: relative;">
+            <img src="biotopia.jpg" alt="Biotopia Cover" style="width: 100%; height: 100%; object-fit: cover; margin: 0;">
+        </div>
+        
+        <div style="padding: 40px 30px;">
+            <h1 style="font-size: 28px; letter-spacing: 2px;">在森林之中，<br>你的代表物是？</h1>
+            
+            <p style="font-size: 14px; color: #888; margin-bottom: 10px; font-style: italic;">
+                This is a fun personality test designed for NTU Forestry Night.<br>
+                Based on the Big Five personality traits,<br>
+                each character represents a unique personality type.
+            </p>
+            
+            <p style="margin-top: 20px;">跟隨直覺，測出你潛藏的大五人格特質，<br>尋找屬於你的森林定位。</p>
+            
+            <button class="btn" onclick="startTest()" style="margin-top: 20px;">開啟森林旅程</button>
+        </div>
+    </div>
+
+    <div id="quiz-section" class="section">
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <p id="question-counter" style="font-size: 14px; margin-bottom: 10px; color: #888;">1 / 15</p>
+        <h3 id="question-text" style="min-height: 80px; display: flex; align-items: center; justify-content: center;">問題載入中...</h3>
+        
+        <div class="options-container">
+            <button class="option-btn" onclick="selectAnswer(5)">非常同意</button>
+            <button class="option-btn" onclick="selectAnswer(4)">同意</button>
+            <button class="option-btn" onclick="selectAnswer(3)">普通</button>
+            <button class="option-btn" onclick="selectAnswer(2)">不同意</button>
+            <button class="option-btn" onclick="selectAnswer(1)">非常不同意</button>
+        </div>
+    </div>
+
+    <div id="result-section" class="section">
+        <div id="result-content">
+            <h2 style="font-size: 16px; color: #888; margin-bottom: 15px; font-weight: normal;">你的森林代表物是...</h2>
+            <img id="result-img" src="" alt="結果動物">
+            <div class="result-title" id="result-name">動物名稱</div>
+            <div class="result-subtitle" id="result-role">森林定位</div>
+            <div class="result-tags" id="result-tags"></div>
+            <div id="result-desc"></div>
+        </div>
+        
+        <button class="btn" onclick="downloadResult()">長按儲存 / 下載圖片</button>
+        <button class="btn btn-outline" onclick="shareResult()">分享測驗給朋友</button>
+        
+        <button id="rickroll-btn" class="btn" style="display: none; background-color: #D96A6A; color: white; margin-top: 10px;" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')">🎁 領取隱藏版大禮包</button>
+
+        <button class="btn btn-outline" style="border: none; color: #888; font-size: 14px; margin-top: 10px;" onclick="location.reload()">重新測驗</button>
+    </div>
+</div>
+
 <script>
+    // 題庫 (包含 <br> 換行標籤)
     const questions = [
         { text: "在社交場合中，<br>我是負責帶動氣氛的小動物。", trait: "E", reverse: false },
         { text: "在社交場合中面對陌生面孔，<br>我會主動打招呼。", trait: "E", reverse: false },
@@ -17,6 +292,7 @@
         { text: "我傾向實際、穩定的生活方式，<br>對抽象事物沒興趣。", trait: "O", reverse: true }
     ];
 
+    // 五大結果資料庫
     const resultsData = {
         "E": { 
             name: "臺灣藍鵲", 
@@ -77,7 +353,7 @@
 
     let currentIndex = 0;
     let scores = { "E": 0, "A": 0, "C": 0, "S": 0, "O": 0 };
-    let rawAnswers = []; 
+    let rawAnswers = []; // 紀錄玩家每一次點擊的分數
 
     function startTest() {
         document.getElementById('home-section').classList.remove('active');
@@ -109,13 +385,13 @@
     }
 
     function calculateResult() {
-        // 檢查是否15題全部選了一模一樣的選項
+        // 檢查是否觸發隱藏版結局 (15題全選一樣)
         const allSame = rawAnswers.every(val => val === rawAnswers[0]);
 
         if (allSame && rawAnswers.length === questions.length) {
             // 觸發彩蛋時，顯示 Rickroll 按鈕，並跳出搞笑警告
             document.getElementById('rickroll-btn').style.display = "block";
-            alert("⚠️ 系統偵測到極度異常的執念... 隱藏機關已觸發！");
+            alert("⚠️ 我偵測到極度異常的執念了嘻嘻...... 已觸發隱藏包haha！");
         } else {
             document.getElementById('rickroll-btn').style.display = "none";
         }
@@ -157,7 +433,7 @@
             scrollY: -window.scrollY
         }).then(canvas => {
             const link = document.createElement('a');
-            link.download = '我的森林代表動物.png';
+            link.download = '我的森林代表物.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
@@ -171,7 +447,10 @@
                 url: window.location.href
             }).catch(console.error);
         } else {
-            alert('複製網址分享給朋友吧：\\n' + window.location.href);
+            alert('複製網址分享你所有的朋友～：\n' + window.location.href);
         }
     }
 </script>
+
+</body>
+</html>
