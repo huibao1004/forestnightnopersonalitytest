@@ -351,6 +351,7 @@
 
     let currentIndex = 0;
     let scores = { "E": 0, "A": 0, "C": 0, "S": 0, "O": 0 };
+    let rawAnswers = []; 
 
     function startTest() {
         document.getElementById('home-section').classList.remove('active');
@@ -371,6 +372,8 @@
         let finalScore = q.reverse ? (6 - score) : score;
         scores[q.trait] += finalScore;
 
+        rawAnswers.push(score);
+
         currentIndex++;
         if (currentIndex < questions.length) {
             showQuestion();
@@ -380,38 +383,29 @@
     }
 
     function calculateResult() {
-        // 檢查是否觸發隱藏版結局 (15題全選一樣)
+        // 檢查是否15題全部選了一模一樣的選項
         const allSame = rawAnswers.every(val => val === rawAnswers[0]);
-        let finalTrait = null;
 
         if (allSame && rawAnswers.length === questions.length) {
-            if (rawAnswers[0] === 1) finalTrait = "ALL_1";
-            else if (rawAnswers[0] === 3) finalTrait = "ALL_3";
-            else if (rawAnswers[0] === 5) finalTrait = "ALL_5";
-            
             // 觸發彩蛋時，顯示 Rickroll 按鈕，並跳出搞笑警告
             document.getElementById('rickroll-btn').style.display = "block";
-            alert("⚠️ 系統偵測到極度異常的執念... 已為您解鎖隱藏結果！");
+            alert("⚠️ 系統偵測到極度異常的執念... 隱藏機關已觸發！");
         } else {
-            // 沒有觸發彩蛋時，確保按鈕是隱藏的
             document.getElementById('rickroll-btn').style.display = "none";
         }
 
-        // 常規計算邏輯
-        if (!finalTrait) {
-            let highestTrait = "E";
-            let maxScore = 0;
-            
-            for (const [trait, score] of Object.entries(scores)) {
-                if (score > maxScore) {
-                    maxScore = score;
-                    highestTrait = trait;
-                }
+        // 常規計算邏輯：照常計算出最高分的動物
+        let highestTrait = "E";
+        let maxScore = 0;
+        
+        for (const [trait, score] of Object.entries(scores)) {
+            if (score > maxScore) {
+                maxScore = score;
+                highestTrait = trait;
             }
-            finalTrait = highestTrait;
         }
 
-        const result = resultsData[finalTrait];
+        const result = resultsData[highestTrait];
 
         // 渲染畫面
         document.getElementById('result-img').src = result.img;
@@ -430,12 +424,11 @@
     function downloadResult() {
         const resultContent = document.getElementById('result-content');
 
-        // 為了確保長圖能完整截取，我們在截圖前確保樣式不會被截斷
         html2canvas(resultContent, {
             scale: 2,
             backgroundColor: "#FFFFFF",
             useCORS: true,
-            scrollY: -window.scrollY // 修正可能因滾動造成的截圖偏移
+            scrollY: -window.scrollY
         }).then(canvas => {
             const link = document.createElement('a');
             link.download = '我的森林代表動物.png';
