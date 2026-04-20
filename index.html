@@ -357,7 +357,7 @@
 
     function showQuestion() {
         const q = questions[currentIndex];
-        document.getElementById('question-text').innerHtML = q.text;
+        document.getElementById('question-text').innerHTML = q.text;
         document.getElementById('question-counter').innerText = `${currentIndex + 1} / ${questions.length}`;
         const progressPercent = ((currentIndex) / questions.length) * 100;
         document.getElementById('progress').style.width = `${progressPercent}%`;
