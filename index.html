@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026臺大森林＆生工之夜——在森林之中，屬於你的代表物是？</title>
+    <title>2026 臺大森林 & 生工之夜——在森林之中，屬於你的代表物是？</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
@@ -107,17 +107,17 @@
             background-size: cover;
             background-position: center top;
             background-repeat: no-repeat;
-            justify-content: center; /* 讓內容垂直置中 */
-            padding: 20px;
+            justify-content: flex-end; /* 【修改】內容靠下方對齊，不擋住上方的吉祥物 */
+            padding: 40px 20px 50px 20px; /* 底部預留一點空間 */
         }
 
         .glass-box {
-            background-color: rgba(255, 255, 255, 0.15); /* 半透明白底 */
-            backdrop-filter: blur(12px); /* 磨砂毛玻璃效果 */
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.1); /* 【修改】稍微降低白底濃度 */
+            backdrop-filter: blur(4px); /* 【修改】降低模糊度，讓背景更清晰 */
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 40px 20px;
+            padding: 30px 20px;
             width: 100%;
             max-width: 400px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -169,21 +169,21 @@
 
         /* 毛玻璃效果的選項按鈕 */
         #quiz-section .option-btn {
-            background-color: rgba(255, 255, 255, 0.15); 
+            background-color: rgba(255, 255, 255, 0.1); 
             color: #FFFFFF;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 15px;
             border-radius: 12px;
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(4px); /* 【修改】選項的模糊度也一併調降 */
+            -webkit-backdrop-filter: blur(4px);
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
         #quiz-section .option-btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.25);
             border-color: #FFFFFF;
             transform: translateY(-2px);
         }
@@ -216,21 +216,21 @@
 <div class="container">
     <!-- 首頁 -->
     <div id="home-section" class="section active">
-        <!-- 毛玻璃文字框 -->
+        <!-- 毛玻璃文字框 (已固定在下方) -->
         <div class="glass-box">
-            <h1 style="font-size: 28px; letter-spacing: 2px;">在森林之中，<br>屬於你的代表物是？</h1>
+            <h1 style="font-size: 26px; letter-spacing: 2px;">在森林之中，<br>屬於你的代表物是？</h1>
             
             <p style="font-size: 14px; margin-bottom: 10px; font-style: italic;">
-                This is a fun personality test designed for <br>NTU F&BSE Night.<br>
+                This is a fun personality test designed for <br>NTU F & BSE Night.<br>
                 Based on the Big Five personality traits,<br>
                 each character represents a unique personality type.
             </p>
             
-            <p style="margin-top: 20px;">依照直覺，尋找屬於你的森林定位。</p>
+            <p style="margin-top: 15px;">跟隨直覺，尋找屬於你的森林定位。</p>
             
-            <button class="btn" onclick="startTest()" style="margin-top: 20px;">開啟森林旅程</button>
+            <button class="btn" onclick="startTest()" style="margin-top: 10px;">開啟森林旅程</button>
             
-            <div style="margin-top: 30px; opacity: 0.9;">
+            <div style="margin-top: 20px; opacity: 0.9;">
                 <p style="font-size: 12px; margin-bottom: 5px; letter-spacing: 1px; color: #FFFFFF;">累計探索人次</p>
                 <img src="https://hits.sh/huibao1004.github.io/forestnightnopersonalitytest.svg?style=for-the-badge&label=VIEWS&color=6B8E73" alt="網站瀏覽次數">
             </div>
@@ -259,7 +259,7 @@
             <img id="result-img" src="" alt="測驗結果">
         </div>
         
-        <!-- 下載與分享按鈕 (套用自訂的深藍色系 #00385A) -->
+        <!-- 下載與分享按鈕 -->
         <button id="download-btn" class="btn" style="background-color: #00385A;" onclick="downloadResult()">長按圖片儲存 / 點此下載</button>
         <button id="share-btn" class="btn btn-outline" style="background-color: #FFFFFF; color: #00385A; border: 1px solid #00385A;" onclick="shareResult()">分享測驗給朋友</button>
         
@@ -290,7 +290,7 @@
         { text: "我傾向實際、穩定的生活方式，<br>對抽象事物沒興趣。", trait: "O", reverse: true }
     ];
 
-    // 五大結果圖片對應表 (請確認已將壓縮過後的圖片上傳並命名正確)
+    // 五大結果圖片對應表
     const resultsData = {
         "E": { img: "magpie_result.jpg" }, // 臺灣藍鵲
         "A": { img: "deer_result.jpg" },   // 臺灣水鹿
