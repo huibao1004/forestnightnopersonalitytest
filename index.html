@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026臺大森林之夜——在森林之中，屬於你的代表物是？</title>
+    <title>2026臺大森林＆生工之夜——在森林之中，屬於你的代表物是？</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --primary-bg: #E5E9EC; /* 首頁與結果頁底色 */
+            --primary-bg: #E5E9EC; /* 網頁最外層底色 */
             --text-color: #2C3E2D;
             --accent-color: #6B8E73;
             --button-hover: #5A7A61;
@@ -41,12 +41,12 @@
         /* 區塊共用設定 */
         .section {
             display: none;
-            padding: 40px 30px;
             flex-direction: column;
             align-items: center;
             text-align: center;
             flex: 1;
             animation: fadeIn 0.5s ease-in-out;
+            padding: 40px 30px;
         }
 
         .section.active {
@@ -100,10 +100,45 @@
         }
 
         /* ==========================================
-           🌲 測驗頁專屬設定 (套用 bg.jpg 與毛玻璃特效)
+           🌲 首頁滿版背景 & 毛玻璃文字框
+           ========================================== */
+        #home-section {
+            background-image: url('cover.jpg'); /* 滿版封面圖 */
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            justify-content: center; /* 讓內容垂直置中 */
+            padding: 20px;
+        }
+
+        .glass-box {
+            background-color: rgba(255, 255, 255, 0.15); /* 半透明白底 */
+            backdrop-filter: blur(12px); /* 磨砂毛玻璃效果 */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            color: #FFFFFF;
+        }
+
+        .glass-box h1 {
+            color: #FFFFFF;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+        }
+
+        .glass-box p {
+            color: #F0F0F0;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        /* ==========================================
+           🌲 測驗頁滿版背景 (套用 bg.jpg 與毛玻璃選項)
            ========================================== */
         #quiz-section {
-            background-image: url('bg.jpg'); /* 替換為你的右圖檔名 */
+            background-image: url('bg.jpg'); /* 滿版無人物背景圖 */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -124,7 +159,6 @@
             background-color: #FFFFFF;
         }
 
-        /* 選項按鈕容器 */
         .options-container {
             display: flex;
             flex-direction: column;
@@ -135,7 +169,7 @@
 
         /* 毛玻璃效果的選項按鈕 */
         #quiz-section .option-btn {
-            background-color: rgba(255, 255, 255, 0.15); /* 半透明白底 */
+            background-color: rgba(255, 255, 255, 0.15); 
             color: #FFFFFF;
             border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 15px;
@@ -143,8 +177,9 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px); /* 磨砂玻璃模糊效果 */
-            -webkit-backdrop-filter: blur(10px); /* 支援 Safari */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
         #quiz-section .option-btn:hover {
@@ -153,7 +188,9 @@
             transform: translateY(-2px);
         }
 
-        /* 結果頁面設計 */
+        /* ==========================================
+           🌲 結果頁面設計 (純大圖)
+           ========================================== */
         #result-content {
             background-color: transparent;
             padding: 0;
@@ -178,27 +215,23 @@
 
 <div class="container">
     <!-- 首頁 -->
-    <div id="home-section" class="section active" style="padding: 0; background-color: #FFFFFF;">
-        <!-- 將高度加高到 400px，並使用 object-position: top 確保動物不被裁切 -->
-        <div style="width: 100%; height: 400px; overflow: hidden; position: relative;">
-            <img src="cover.jpg" alt="Biotopia Cover" style="width: 100%; height: 100%; object-fit: cover; object-position: top; margin: 0;">
-        </div>
-        
-        <div style="padding: 40px 30px;">
+    <div id="home-section" class="section active">
+        <!-- 毛玻璃文字框 -->
+        <div class="glass-box">
             <h1 style="font-size: 28px; letter-spacing: 2px;">在森林之中，<br>屬於你的代表物是？</h1>
             
-            <p style="font-size: 14px; color: #888; margin-bottom: 10px; font-style: italic;">
-                This is a fun personality test designed for <br>NTU Forestry Night.<br>
+            <p style="font-size: 14px; margin-bottom: 10px; font-style: italic;">
+                This is a fun personality test designed for <br>NTU F&BSE Night.<br>
                 Based on the Big Five personality traits,<br>
                 each character represents a unique personality type.
             </p>
             
-            <p style="margin-top: 20px;">跟隨直覺，尋找屬於你的森林定位。</p>
+            <p style="margin-top: 20px;">依照直覺，尋找屬於你的森林定位。</p>
             
             <button class="btn" onclick="startTest()" style="margin-top: 20px;">開啟森林旅程</button>
             
-            <div style="margin-top: 30px; opacity: 0.8;">
-                <p style="font-size: 12px; color: #888; margin-bottom: 5px; letter-spacing: 1px;">累計探索人次</p>
+            <div style="margin-top: 30px; opacity: 0.9;">
+                <p style="font-size: 12px; margin-bottom: 5px; letter-spacing: 1px; color: #FFFFFF;">累計探索人次</p>
                 <img src="https://hits.sh/huibao1004.github.io/forestnightnopersonalitytest.svg?style=for-the-badge&label=VIEWS&color=6B8E73" alt="網站瀏覽次數">
             </div>
         </div>
@@ -222,6 +255,7 @@
     <!-- 結果頁 -->
     <div id="result-section" class="section" style="background-color: #FFFFFF;">
         <div id="result-content">
+            <!-- 這裡只負責顯示你上傳的精美大圖 -->
             <img id="result-img" src="" alt="測驗結果">
         </div>
         
