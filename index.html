@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --primary-bg: #E5E9EC; /* 礦石灰藍背景 */
+            --primary-bg: #E5E9EC; /* 首頁與結果頁底色 */
             --text-color: #2C3E2D;
             --accent-color: #6B8E73;
             --button-hover: #5A7A61;
@@ -67,14 +67,6 @@
             margin-bottom: 30px;
         }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            object-fit: cover;
-        }
-
         /* 按鈕設計 - 簡約風 */
         .btn {
             background-color: var(--accent-color);
@@ -107,23 +99,32 @@
             background-color: var(--primary-bg);
         }
 
-        /* 測驗進度與選項 */
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background-color: #E0E0E0;
-            border-radius: 3px;
-            margin-bottom: 30px;
-            overflow: hidden;
+        /* ==========================================
+           🌲 測驗頁專屬設定 (套用 bg.jpg 與毛玻璃特效)
+           ========================================== */
+        #quiz-section {
+            background-image: url('bg.jpg'); /* 替換為你的右圖檔名 */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        .progress {
-            height: 100%;
-            background-color: var(--accent-color);
-            width: 0%;
-            transition: width 0.3s ease;
+        /* 讓文字在深色底圖上變白且有陰影 */
+        #quiz-section #question-counter,
+        #quiz-section #question-text {
+            color: #FFFFFF !important;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
         }
 
+        /* 進度條改為白色/半透明 */
+        #quiz-section .progress-bar {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        #quiz-section .progress {
+            background-color: #FFFFFF;
+        }
+
+        /* 選項按鈕容器 */
         .options-container {
             display: flex;
             flex-direction: column;
@@ -132,23 +133,27 @@
             margin-top: 20px;
         }
 
-        .option-btn {
-            background-color: var(--primary-bg);
-            border: 1px solid transparent;
+        /* 毛玻璃效果的選項按鈕 */
+        #quiz-section .option-btn {
+            background-color: rgba(255, 255, 255, 0.15); /* 半透明白底 */
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 15px;
             border-radius: 12px;
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--text-color);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px); /* 磨砂玻璃模糊效果 */
+            -webkit-backdrop-filter: blur(10px); /* 支援 Safari */
         }
 
-        .option-btn:hover {
-            background-color: #E8EFE9;
-            border-color: var(--accent-color);
+        #quiz-section .option-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-color: #FFFFFF;
+            transform: translateY(-2px);
         }
 
-        /* 結果頁面設計 (已改為純圖無文字) */
+        /* 結果頁面設計 */
         #result-content {
             background-color: transparent;
             padding: 0;
@@ -173,9 +178,10 @@
 
 <div class="container">
     <!-- 首頁 -->
-    <div id="home-section" class="section active" style="padding: 0;">
-        <div style="width: 100%; height: 300px; overflow: hidden; position: relative;">
-            <img src="biotopia.jpg" alt="Biotopia Cover" style="width: 100%; height: 100%; object-fit: cover; margin: 0;">
+    <div id="home-section" class="section active" style="padding: 0; background-color: #FFFFFF;">
+        <!-- 將高度加高到 400px，並使用 object-position: top 確保動物不被裁切 -->
+        <div style="width: 100%; height: 400px; overflow: hidden; position: relative;">
+            <img src="cover.jpg" alt="Biotopia Cover" style="width: 100%; height: 100%; object-fit: cover; object-position: top; margin: 0;">
         </div>
         
         <div style="padding: 40px 30px;">
@@ -201,7 +207,7 @@
     <!-- 測驗頁 -->
     <div id="quiz-section" class="section">
         <div class="progress-bar"><div class="progress" id="progress"></div></div>
-        <p id="question-counter" style="font-size: 14px; margin-bottom: 10px; color: #888;">1 / 15</p>
+        <p id="question-counter" style="font-size: 14px; margin-bottom: 10px;">1 / 15</p>
         <h3 id="question-text" style="min-height: 80px; display: flex; align-items: center; justify-content: center;">問題載入中...</h3>
         
         <div class="options-container">
@@ -214,17 +220,17 @@
     </div>
 
     <!-- 結果頁 -->
-    <div id="result-section" class="section">
+    <div id="result-section" class="section" style="background-color: #FFFFFF;">
         <div id="result-content">
-            <!-- 這裡只負責顯示你上傳的精美大圖 -->
             <img id="result-img" src="" alt="測驗結果">
         </div>
         
+        <!-- 下載與分享按鈕 (套用自訂的深藍色系 #00385A) -->
         <button id="download-btn" class="btn" style="background-color: #00385A;" onclick="downloadResult()">長按圖片儲存 / 點此下載</button>
         <button id="share-btn" class="btn btn-outline" style="background-color: #FFFFFF; color: #00385A; border: 1px solid #00385A;" onclick="shareResult()">分享測驗給朋友</button>
         
         <!-- 彩蛋按鈕 -->
-        <button id="rickroll-btn" class="btn" style="display: none; background-color: #D96A6A; color: white; margin-top: 10px;" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')">🎁 點擊領取隱藏大禮包</button>
+        <button id="rickroll-btn" class="btn" style="display: none; background-color: #D96A6A; color: white; margin-top: 10px;" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')">🎁 領取隱藏版大禮包</button>
 
         <button class="btn btn-outline" style="border: none; color: #888; font-size: 14px; margin-top: 10px;" onclick="location.reload()">重新測驗</button>
     </div>
@@ -250,7 +256,7 @@
         { text: "我傾向實際、穩定的生活方式，<br>對抽象事物沒興趣。", trait: "O", reverse: true }
     ];
 
-    // 五大結果圖片對應表 (請確認圖片檔名跟你上傳到 GitHub 的一樣)
+    // 五大結果圖片對應表 (請確認已將壓縮過後的圖片上傳並命名正確)
     const resultsData = {
         "E": { img: "magpie_result.jpg" }, // 臺灣藍鵲
         "A": { img: "deer_result.jpg" },   // 臺灣水鹿
